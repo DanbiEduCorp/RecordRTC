@@ -4785,7 +4785,7 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
         }
     }
 
-    var Storage = {};
+    // var Storage = {};
 
     if (typeof AudioContext !== 'undefined') {
         Storage.AudioContext = AudioContext;
