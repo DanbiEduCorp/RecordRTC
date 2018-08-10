@@ -16,8 +16,7 @@
  *     bitsPerSecond: 256 * 8 * 1024,  // if this is provided, skip above two
  *     checkForInactiveTracks: true,
  *     timeSlice: 1000, // concatenate intervals based blobs
- *     ondataavailable: function() {}, // get intervals based blobs
- *     ignoreMutedMedia: true
+ *     ondataavailable: function() {} // get intervals based blobs
  * }
  * var recorder = new MediaStreamRecorder(mediaStream, config);
  * recorder.record();
@@ -145,9 +144,6 @@ function MediaStreamRecorder(mediaStream, config) {
             }
         }
 
-        // ignore muted/disabled/inactive tracks
-        mediaRecorder.ignoreMutedMedia = config.ignoreMutedMedia === true;
-
         // Dispatching OnDataAvailable Handler
         mediaRecorder.ondataavailable = function(e) {
             if (e.data) {
@@ -209,6 +205,14 @@ function MediaStreamRecorder(mediaStream, config) {
         };
 
         mediaRecorder.onerror = function(error) {
+            if (!error) {
+                return;
+            }
+
+            if (!error.name) {
+                error.name = 'UnknownError';
+            }
+
             allStates.push('error: ' + error);
 
             if (!config.disableLogs) {
